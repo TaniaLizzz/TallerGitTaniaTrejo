@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conversor de Números a Texto en Español</title>
+    <title>Conversor de Números a Texto en Español e Inglés</title>
     <!-- Enlace a Bootstrap CSS desde jsDelivr -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
@@ -39,7 +39,7 @@
         .form-label {
             font-weight: 500;
         }
-        .result-text {
+        .result-text, .translation-text {
             font-size: 1.2rem;
             font-weight: bold;
             color: #343a40;
@@ -54,7 +54,7 @@
 </head>
 <body>
     <div class="container main-container">
-        <h1 class="text-center mb-4">Conversor de Números a Texto en Español</h1>
+        <h1 class="text-center mb-4">Conversor de Números a Texto en Español e Inglés</h1>
         <div class="alert alert-info" role="alert">
             <strong>Atención:</strong> Solo se aceptan números entre 0 y 1000.
         </div>
@@ -62,9 +62,10 @@
             <label for="numberInput" class="form-label">Ingrese un número</label>
             <input type="number" class="form-control" id="numberInput" placeholder="Ingrese un número" min="0" max="1000">
         </div>
-        <button class="btn btn-custom w-100" onclick="translateNumber()">Traducir</button>
-        <button class="btn btn-secondary w-100 mt-2" onclick="translateToEnglish()">Traducir al Inglés</button>
+        <button class="btn btn-custom w-100 mb-2" onclick="translateNumber()">Traducir</button>
+        <button class="btn btn-secondary w-100" onclick="translateToEnglish()">Traducir al Inglés</button>
         <p class="mt-4 result-text" id="result"></p>
+        <p class="mt-2 translation-text" id="translation"></p>
         <div class="footer">
             <p>&copy; 2024 Conversor de Números a Texto. Todos los derechos reservados.</p>
         </div>
@@ -97,53 +98,81 @@
             return 'Número fuera del rango permitido';
         }
 
-        function numberToWordsEnglish(number) {
-            const onesEng = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
-            const teensEng = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
-            const tensEng = ['zero', 'ten', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-            const hundredsEng = ['hundred'];
-
-            if (number === 0) return 'zero';
-            if (number === 1000) return 'one thousand';
-            if (number < 10) return onesEng[number];
-            if (number < 20) return teensEng[number - 10];
-            if (number < 100) {
-                return tensEng[Math.floor(number / 10)] + (number % 10 !== 0 ? ' ' + onesEng[number % 10] : '');
-            }
-            if (number < 1000) {
-                const hundredPart = Math.floor(number / 100);
-                const rest = number % 100;
-                const hundredWord = onesEng[hundredPart] + ' ' + hundredsEng[0];
-                const restWord = rest > 0 ? ' and ' + numberToWordsEnglish(rest) : '';
-                return hundredWord + restWord;
-            }
-            return 'Number out of range';
-        }
-
         function translateNumber() {
             const numberInput = document.getElementById('numberInput');
             const number = parseInt(numberInput.value);
             if (isNaN(number) || number < 0 || number > 1000) {
                 document.getElementById('result').innerText = 'Por favor, ingrese un número entre 0 y 1000.';
                 document.getElementById('result').style.color = 'red';
+                document.getElementById('translation').innerText = '';
             } else {
                 const result = numberToWords(number);
                 document.getElementById('result').innerText = result.charAt(0).toUpperCase() + result.slice(1);
                 document.getElementById('result').style.color = '#343a40';
+                document.getElementById('translation').innerText = '';
             }
         }
 
         function translateToEnglish() {
-            const numberInput = document.getElementById('numberInput');
-            const number = parseInt(numberInput.value);
-            if (isNaN(number) || number < 0 || number > 1000) {
-                document.getElementById('result').innerText = 'Please enter a number between 0 and 1000.';
-                document.getElementById('result').style.color = 'red';
-            } else {
-                const result = numberToWordsEnglish(number);
-                document.getElementById('result').innerText = result.charAt(0).toUpperCase() + result.slice(1);
-                document.getElementById('result').style.color = '#343a40';
-            }
+            const spanishText = document.getElementById('result').innerText;
+            const translations = {
+                'cero': 'zero',
+                'uno': 'one',
+                'dos': 'two',
+                'tres': 'three',
+                'cuatro': 'four',
+                'cinco': 'five',
+                'seis': 'six',
+                'siete': 'seven',
+                'ocho': 'eight',
+                'nueve': 'nine',
+                'diez': 'ten',
+                'once': 'eleven',
+                'doce': 'twelve',
+                'trece': 'thirteen',
+                'catorce': 'fourteen',
+                'quince': 'fifteen',
+                'dieciséis': 'sixteen',
+                'diecisiete': 'seventeen',
+                'dieciocho': 'eighteen',
+                'diecinueve': 'nineteen',
+                'veinte': 'twenty',
+                'veintiuno': 'twenty-one',
+                'veintidós': 'twenty-two',
+                'veintitrés': 'twenty-three',
+                'veinticuatro': 'twenty-four',
+                'veinticinco': 'twenty-five',
+                'veintiséis': 'twenty-six',
+                'veintisiete': 'twenty-seven',
+                'veintiocho': 'twenty-eight',
+                'veintinueve': 'twenty-nine',
+                'treinta': 'thirty',
+                'cuarenta': 'forty',
+                'cincuenta': 'fifty',
+                'sesenta': 'sixty',
+                'setenta': 'seventy',
+                'ochenta': 'eighty',
+                'noventa': 'ninety',
+                'cien': 'one hundred',
+                'ciento': 'one hundred and',
+                'doscientos': 'two hundred',
+                'trescientos': 'three hundred',
+                'cuatrocientos': 'four hundred',
+                'quinientos': 'five hundred',
+                'seiscientos': 'six hundred',
+                'setecientos': 'seven hundred',
+                'ochocientos': 'eight hundred',
+                'novecientos': 'nine hundred',
+                'mil': 'one thousand'
+            };
+
+            const resultText = document.getElementById('result').innerText.toLowerCase();
+            const englishTranslation = Object.entries(translations)
+                .filter(([key]) => resultText.includes(key))
+                .map(([_, value]) => value)
+                .join(' ');
+
+            document.getElementById('translation').innerText = englishTranslation.charAt(0).toUpperCase() + englishTranslation.slice(1);
         }
 
         // Añadir evento para traducir al presionar Enter
