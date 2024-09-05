@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traductor de Números a Letras</title>
+</head>
+<body>
+    <h1>Traductor de Números a Letras</h1>
+    <input type="number" id="numberInput" placeholder="Ingrese un número" min="0" max="999999999999999">
+    <button onclick="translateNumber()">Traducir</button>
+    <p id="result"></p>
+
+    <script>
+        const ones = ['cero', 'uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve'];
+        const teens = ['diez', 'once', 'doce', 'trece', 'catorce', 'quince', 'dieciséis', 'diecisiete', 'dieciocho', 'diecinueve'];
+        const tens = ['cero', 'diez', 'veinte', 'treinta', 'cuarenta', 'cincuenta', 'sesenta', 'setenta', 'ochenta', 'noventa'];
+        const hundreds = ['cero', 'cien', 'doscientos', 'trescientos', 'cuatrocientos', 'quinientos', 'seiscientos', 'setecientos', 'ochocientos', 'novecientos'];
+
+        function numberToWords(number) {
+            if (number === 0) return 'cero';
+            if (number < 10) return ones[number];
+            if (number < 20) return teens[number - 10];
+            if (number < 100) return tens[Math.floor(number / 10)] + (number % 10 !== 0 ? ' y ' + ones[number % 10] : '');
+            if (number < 1000) return hundreds[Math.floor(number / 100)] + (number % 100 !== 0 ? ' ' + numberToWords(number % 100) : '');
+            // Implementar más lógica para números mayores aquí
+            return 'Número demasiado grande';
+        }
+
+        function translateNumber() {
+            const number = parseInt(document.getElementById('numberInput').value);
+            const result = numberToWords(number);
+            document.getElementById('result').innerText = result;
+        }
+    </script>
+</body>
+</html>
