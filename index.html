@@ -63,6 +63,7 @@
             <input type="number" class="form-control" id="numberInput" placeholder="Ingrese un número" min="0" max="1000">
         </div>
         <button class="btn btn-custom w-100" onclick="translateNumber()">Traducir</button>
+        <button class="btn btn-secondary w-100 mt-2" onclick="translateToEnglish()">Traducir al Inglés</button>
         <p class="mt-4 result-text" id="result"></p>
         <div class="footer">
             <p>&copy; 2024 Conversor de Números a Texto. Todos los derechos reservados.</p>
@@ -96,6 +97,29 @@
             return 'Número fuera del rango permitido';
         }
 
+        function numberToWordsEnglish(number) {
+            const onesEng = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+            const teensEng = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+            const tensEng = ['zero', 'ten', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+            const hundredsEng = ['hundred'];
+
+            if (number === 0) return 'zero';
+            if (number === 1000) return 'one thousand';
+            if (number < 10) return onesEng[number];
+            if (number < 20) return teensEng[number - 10];
+            if (number < 100) {
+                return tensEng[Math.floor(number / 10)] + (number % 10 !== 0 ? ' ' + onesEng[number % 10] : '');
+            }
+            if (number < 1000) {
+                const hundredPart = Math.floor(number / 100);
+                const rest = number % 100;
+                const hundredWord = onesEng[hundredPart] + ' ' + hundredsEng[0];
+                const restWord = rest > 0 ? ' and ' + numberToWordsEnglish(rest) : '';
+                return hundredWord + restWord;
+            }
+            return 'Number out of range';
+        }
+
         function translateNumber() {
             const numberInput = document.getElementById('numberInput');
             const number = parseInt(numberInput.value);
@@ -104,6 +128,19 @@
                 document.getElementById('result').style.color = 'red';
             } else {
                 const result = numberToWords(number);
+                document.getElementById('result').innerText = result.charAt(0).toUpperCase() + result.slice(1);
+                document.getElementById('result').style.color = '#343a40';
+            }
+        }
+
+        function translateToEnglish() {
+            const numberInput = document.getElementById('numberInput');
+            const number = parseInt(numberInput.value);
+            if (isNaN(number) || number < 0 || number > 1000) {
+                document.getElementById('result').innerText = 'Please enter a number between 0 and 1000.';
+                document.getElementById('result').style.color = 'red';
+            } else {
+                const result = numberToWordsEnglish(number);
                 document.getElementById('result').innerText = result.charAt(0).toUpperCase() + result.slice(1);
                 document.getElementById('result').style.color = '#343a40';
             }
