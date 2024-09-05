@@ -91,7 +91,7 @@
                 const rest = number % 100;
                 const hundredWord = hundreds[hundredPart];
                 const restWord = rest > 0 ? ' ' + numberToWords(rest) : '';
-                return hundredPart === 1 && rest === 0 ? 'cien' : hundredWord + (rest > 0 ? ' ' + numberToWords(rest) : '');
+                return hundredPart === 1 && rest === 0 ? 'cien' : hundredWord + restWord;
             }
             return 'Número fuera del rango permitido';
         }
@@ -108,6 +108,14 @@
                 document.getElementById('result').style.color = '#343a40';
             }
         }
+
+        // Añadir evento para traducir al presionar Enter
+        document.getElementById('numberInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Evita el comportamiento por defecto del Enter en un campo de texto
+                translateNumber(); // Llama a la función de traducción
+            }
+        });
     </script>
 </body>
 </html>
